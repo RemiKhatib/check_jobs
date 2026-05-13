@@ -6,7 +6,14 @@
 # 4) Check for the API of the websites
 # 5) Make one module per website
 # 6) Create a database
-# 7) 
+# 7) Make the python requierements.txt "pip freeze > requirements.txt"
 
-print("Hello world")
+##########
+#Libraries
+##########
+from BPCE import *
 
+##########################
+#Loop through the websites
+##########################
+bpce_read()
