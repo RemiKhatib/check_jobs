@@ -7,12 +7,16 @@
 ##########
 import requests
 import general_tools as gt
+import datetime
 
 
 ###########################################
 #Read the page associate with mobilite BPCE
 ###########################################
 def bpce_read():
+
+    nb_offers_max=500 #Number of offers displayed by the API
+
     #API call
     url = 'https://mobilite.groupebpce.fr/app/wp-json/bpce/v1/search/jobs'
     data = {
@@ -34,29 +38,43 @@ def bpce_read():
         "external": False,
         "userID": "",
         "from": 0,
-        "size": 9
+        "size": nb_offers_max
     }
 #XXX To uncomment : The goal is to use a test file instead of callin the website BPCE
-#    response = requests.post(url, json=data)
-    response=gt.MockResponse("bpce_test.json",200)
+    if not gt.DEV :
+        response = requests.post(url, json=data)
+    else :
+        response=gt.MockResponse("bpce_test.json",200)
 
-    #Generation of the response
+    #Extraction of the main information
     if response.status_code == 200:
+        ljobs=[]
         jobs = response.json()
-        for job in jobs:
-            print(f"{job} : {jobs[job]}")
+        if(jobs["data"]["total"]<=nb_offers_max):
+            for job in jobs["data"]["items"]:
+                ljobs.append({
+                    "website" : "BPCE",
+                    "id" : job["job_number"],
+                    "title" : job["title"],
+                    "date_creation" : job["datetime"],
+                    "company" : job["brand"],
+                    "link" : job["link"]["url"],
+                    "description" : job["description"],
+                    "city" : job["localisations"][0]["city"],
+                    "zipcode" : job["localisations"][0]["zipcode"],
+                    "address" : job["localisations"][0]["address"],
+                    "date_found" : datetime.date.today()
+                })
+            return ljobs
 
+        #Too many answers
+        else:
+            print(f"Too many offers available on BPCE ({jobs["data"]["total"]}). Max limit reached ({nb_offers_max}).")
+            return []
 
-        #XXX Travail work Arbeit : Get the list of jobs
-        for job in jobs:
-            print(job)
+    #API problem
     else:
         gt.err_management()
         print(f"API status code: {response.status_code}.")
+        return []
     
-
-########################################
-#Extraction of the important information
-########################################
-def bpce_extract():
-    pass
