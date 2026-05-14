@@ -6,13 +6,14 @@
 #Libraries
 ##########
 import requests
+import general_tools as gt
 
 
 ###########################################
 #Read the page associate with mobilite BPCE
 ###########################################
 def bpce_read():
-    #Appel API
+    #API call
     url = 'https://mobilite.groupebpce.fr/app/wp-json/bpce/v1/search/jobs'
     data = {
         "lang": "fr",
@@ -35,17 +36,23 @@ def bpce_read():
         "from": 0,
         "size": 9
     }
-    response = requests.post(url, json=data)
+#XXX To uncomment : The goal is to use a test file instead of callin the website BPCE
+#    response = requests.post(url, json=data)
+    response=gt.MockResponse("bpce_test.json",200)
 
-
+    #Generation of the response
     if response.status_code == 200:
         jobs = response.json()
-        print(f"Trouvé {len(jobs)} jobs")
+        for job in jobs:
+            print(f"{job} : {jobs[job]}")
+
+
         #XXX Travail work Arbeit : Get the list of jobs
         for job in jobs:
             print(job)
     else:
-        print(f"Erreur: {response.status_code}")
+        gt.err_management()
+        print(f"API status code: {response.status_code}.")
     
 
 ########################################

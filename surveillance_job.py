@@ -13,6 +13,7 @@
 ##########
 from BPCE import *
 
+
 ##########################
 #Loop through the websites
 ##########################
