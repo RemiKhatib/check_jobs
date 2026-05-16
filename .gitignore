@@ -1,4 +1,11 @@
-*.db         #Database
-*.html       #Output file
-*.json       #Testing file
-__pycache__/ #Binaries
+#Database
+*.db
+
+#Output file
+*.html
+
+#Testing file
+*.json
+
+#Binaries
+__pycache__/ 
