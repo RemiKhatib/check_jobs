@@ -40,7 +40,7 @@ def bpce_read():
         "from": 0,
         "size": nb_offers_max
     }
-#XXX To uncomment : The goal is to use a test file instead of callin the website BPCE
+    #The goal is to use a test file instead of callin the website BPCE
     if not gt.DEV :
         response = requests.post(url, json=data)
     else :
@@ -56,13 +56,13 @@ def bpce_read():
                     "website" : "BPCE",
                     "id" : job["job_number"],
                     "title" : job["title"],
-                    "date_creation" : job["datetime"],
-                    "company" : job["brand"],
-                    "link" : job["link"]["url"],
+                    "company" : job["brand"][0],
+                    "link" : "https://mobilite.groupebpce.fr"+job["link"]["url"],
                     "description" : job["description"],
                     "city" : job["localisations"][0]["city"],
                     "zipcode" : job["localisations"][0]["zipcode"],
                     "address" : job["localisations"][0]["address"],
+                    "date_creation" : datetime.date.fromisoformat(job["datetime"][:10]),
                     "date_found" : datetime.date.today()
                 })
             return ljobs
