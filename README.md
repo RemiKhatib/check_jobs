@@ -3,11 +3,7 @@ Its role is to select all the jobs which could interest me among a list of websi
 
 # Work in progress
 # Plan :
-1. [] Check for the API of the websites. => OK for BPCE
-
-2. [] Make one module per website => OK for BPCE
-
-3. [] Store every offer in database. The table should contain : 
+1. [] Store every offer in database. The table should contain : 
   - website : website where the offer wwas found
   - id ; Id of the job
   - company : company proposing the job
@@ -22,10 +18,20 @@ Its role is to select all the jobs which could interest me among a list of websi
   - to_apply : job to apply
   - date_applied : application date
 
-4. [] Define the list of websites. Create the rules to respect during the search. At each run, it should avoid duplicates.
+2. [] Define the list of websites. Check all the API
+  - BPCE OK
+  - BdF OK
+  - VISA Nothing in France
+  - CB : ???
+  - BNPP : output Javascript. To analyse nicely.
+  - CA : Nothing now
+  - Crédit mutuel : ?????
+  - APEC : https://www.apec.fr/cms/webservices/rechercheOffre
+  - EPI : ???
+  - LCL : ???
 
-5. [] Create a database => OK
+3. [] Create a database => OK
 
-6. [] Delete the jobs which do not appear anymore in the extraction.
+4. [] Delete the jobs which do not appear anymore in the extraction.
 
-6. [] Make the python requierements.txt "pip freeze > requirements.txt"
+5. [] Make the python requierements.txt "pip freeze > requirements.txt"
