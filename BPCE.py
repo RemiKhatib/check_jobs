@@ -40,7 +40,7 @@ def bpce_read():
         "from": 0,
         "size": nb_offers_max
     }
-    #The goal is to use a test file instead of callin the website BPCE
+    #The goal is to use a test file instead of calling the website BPCE
     if not gt.DEV :
         response = requests.post(url, json=data)
     else :
