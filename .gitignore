@@ -1,0 +1,4 @@
+*.db         #Database
+*.html       #Output file
+*.json       #Testing file
+__pycache__/ #Binaries

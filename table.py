@@ -17,15 +17,16 @@ class DatabaseManager:
                 id_prim         INTEGER PRIMARY KEY AUTOINCREMENT,
                 website         TEXT NOT NULL,
                 id              TEXT NOT NULL,
-                title           TEXT DEFAULT NULL,
                 company         TEXT DEFAULT NULL,
+                title           TEXT DEFAULT NULL,
                 link            TEXT DEFAULT NULL,
-                description     TEXT DEFAULT NULL,
                 city            TEXT DEFAULT NULL,
                 zipcode         INTEGER DEFAULT NULL,
                 address         TEXT DEFAULT NULL,
                 date_creation   DATE DEFAULT NULL,
                 date_found      DATE DEFAULT NULL,
+                checked         INTEGER DEFAULT 0,
+                to_apply        INTEGER DEFAULT 0,
                 date_applied    DATE DEFAULT NULL,
                 UNIQUE(website, id)
             )
@@ -47,13 +48,12 @@ class DatabaseManager:
                     #We insert everything but the date of application.
                     #We update everything but the date of application and the date when it has been found
                     self.cur.execute("""
-                        INSERT INTO job_offers (website, id, title, company, link, description, city, zipcode, address, date_creation, date_found)
-                        VALUES (:website, :id, :title, :company, :link, :description, :city, :zipcode, :address, :date_creation, :date_found)
+                        INSERT INTO job_offers (website, id, company, title, link, city, zipcode, address, date_creation, date_found)
+                        VALUES (:website, :id, :company, :title, :link, :city, :zipcode, :address, :date_creation, :date_found)
                         ON CONFLICT(website, id) DO UPDATE SET
-                            title           = excluded.title        ,
                             company         = excluded.company      ,
+                            title           = excluded.title        ,
                             link            = excluded.link         ,
-                            description     = excluded.description  ,
                             city            = excluded.city         ,
                             zipcode         = excluded.zipcode      ,
                             address         = excluded.address      ,
@@ -63,19 +63,55 @@ class DatabaseManager:
                 except sqlite3.IntegrityError as e:
                     print(f"Error upserting record {job['website']}, {job['id']}: {e}")
             self.con.commit()
-            print(f"Processed {nb_ok}/{len(ldict)} records.")
+            print(f"{ldict[0]["website"]}: Processed {nb_ok}/{len(ldict)} records.")
         except Exception as e:
             self.con.rollback()
             gt.err_management()
             print(f"Unexpected error: {e}\nRollback for {ldict[0]["website"]} offers.")
 
 
-    #Display everything but primary key
-    def select_all(self):
+    #Display all the jobs that I have to yet checked or the jobs where I should apply.
+    #All the columns are displayed but primary key and address. Associate "title" and "link" in the same column.
+    def select_to_check(self):
         self.cur.execute("""
-            SELECT website, id, title, company, link, description, city, zipcode, address, date_creation, date_found, date_applied
-            FROM job_offers 
-            order by date_creation desc, date_applied desc
+            SELECT 
+                website,
+                id,
+                company,
+                concat('<a href="',link,'" target="_blank">',title,'</a>'),
+                city,
+                zipcode,
+                date_creation,
+                date_found,
+                checked,
+                to_apply,
+                date_applied
+            FROM job_offers
+            WHERE (checked=0 OR (to_apply<>0 AND date_applied is null))
+            order by date_creation, date_found
+        """)
+        return self.cur.fetchall()
+
+
+    #Display all the jobs where I applied
+    #All the columns are displayed but primary key and address. Associate "title" and "link" in the same column.
+    def select_applied(self):
+        self.cur.execute("""
+            SELECT 
+                website,
+                id,
+                company,
+                concat('<a href="',link,'" target="_blank">',title,'</a>'),
+                city,
+                zipcode,
+                date_creation,
+                date_found,
+                checked,
+                to_apply,
+                date_applied
+            FROM job_offers
+            WHERE date_applied is not null
+            order by date_applied desc, date_creation desc
         """)
         return self.cur.fetchall()
 

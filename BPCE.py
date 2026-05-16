@@ -55,10 +55,9 @@ def bpce_read():
                 ljobs.append({
                     "website" : "BPCE",
                     "id" : job["job_number"],
-                    "title" : job["title"],
                     "company" : job["brand"][0],
+                    "title" : job["title"],
                     "link" : "https://mobilite.groupebpce.fr"+job["link"]["url"],
-                    "description" : job["description"],
                     "city" : job["localisations"][0]["city"],
                     "zipcode" : job["localisations"][0]["zipcode"],
                     "address" : job["localisations"][0]["address"],
