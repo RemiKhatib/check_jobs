@@ -3,6 +3,7 @@
 ##########
 import BPCE
 import BdF
+import APEC
 import table
 import tabulate
 
@@ -17,7 +18,8 @@ db.create_table()
 #Loop through the websites
 ##########################
 jobs=BPCE.bpce_read()       ; db.upsert(jobs)
-jobs=BdF.bdf_read()          ; db.upsert(jobs)
+jobs=BdF.bdf_read()         ; db.upsert(jobs)
+jobs=APEC.apec_read()       ; db.upsert(jobs)
 
 
 ################################

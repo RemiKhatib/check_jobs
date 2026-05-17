@@ -1,6 +1,14 @@
 **This program has been written by Rémi Khatib.
 Its role is to select all the jobs which could interest me among a list of websites**
 
+# How to use it ?
+Run it when you want to download the last job offers (now only BPCE and LCL are working).
+It will create :
+  - a database accessible with sqlite (table job_offers)
+  - a html file where you will see 2 tables (the jobs you should check or recheck ; the jobs you applied)
+The basic information about the jobs are displayed on the html page. Then you can tell if any offer interst you and when you candidated (using SQL).
+
+
 # Work in progress
 # Plan :
 1. [] Store every offer in database. The table should contain : 
@@ -21,14 +29,16 @@ Its role is to select all the jobs which could interest me among a list of websi
 2. [] Define the list of websites. Check all the API
   - BPCE OK
   - BdF OK
+  - APEC : OK
   - VISA Nothing in France
   - CB : ???
   - BNPP : output Javascript. To analyse nicely.
   - CA : Nothing now
   - Crédit mutuel : ?????
-  - APEC : https://www.apec.fr/cms/webservices/rechercheOffre
   - EPI : ???
   - LCL : ???
+  - SG : Use php
+ 
 
 3. [] Create a database => OK
 
