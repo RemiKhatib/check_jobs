@@ -31,13 +31,13 @@ The basic information about the jobs are displayed on the html page. Then you ca
   - BdF OK
   - APEC : OK
   - VISA Nothing in France
-  - CB : ???
+  - CB : Only 1 offer.
+  - EPI : output HTML. No offer right now. To analyse nicely.
   - BNPP : output Javascript. To analyse nicely.
+  - SG : php. To analyse nicely.
   - CA : Nothing now
-  - Crédit mutuel : ?????
-  - EPI : ???
-  - LCL : ???
-  - SG : Use php
+  - Crédit mutuel : No
+  - LCL : No
  
 
 3. [] Create a database => OK

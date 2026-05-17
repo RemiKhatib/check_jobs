@@ -13,7 +13,7 @@ import datetime
 ###########################################
 #Read the page associate with mobilite APEC
 ###########################################
-def apec_read():
+def read():
 
     nb_offers_max=500 #Number of offers displayed by the API
 

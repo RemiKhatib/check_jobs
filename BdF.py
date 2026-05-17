@@ -13,7 +13,7 @@ import datetime
 ##########################################
 #Read the page associate with mobilite BDF
 ##########################################
-def bdf_read():
+def read():
 
     nb_offers_max=total=500 #Number maximal of offers displayed by the API
     offset=0 #Offset to check all the pages
