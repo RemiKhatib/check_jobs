@@ -85,3 +85,7 @@ def read():
     return ljobs
 
     
+if __name__=="__main__":
+    jobs=read()
+    for job in jobs:
+        print(job)

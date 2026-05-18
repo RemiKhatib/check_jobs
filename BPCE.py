@@ -77,3 +77,7 @@ def read():
         print(f"API status code: {response.status_code}.")
         return []
     
+if __name__=="__main__":
+    jobs=read()
+    for job in jobs:
+        print(job)

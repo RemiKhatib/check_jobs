@@ -40,7 +40,7 @@ def read():
             "salaireMaximum":"200",
             "motsCles":"banque"
         }
-    #The goal is to use a test file instead of calling the website BPCE
+    #The goal is to use a test file instead of calling the website APEC
     if not gt.DEV :
         response = requests.post(url, json=data)
     else :
@@ -77,3 +77,7 @@ def read():
         print(f"API status code: {response.status_code}.")
         return []
     
+if __name__=="__main__":
+    jobs=read()
+    for job in jobs:
+        print(job)

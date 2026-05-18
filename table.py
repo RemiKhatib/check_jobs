@@ -121,5 +121,20 @@ class DatabaseManager:
         self.con.close()
 
 
+if __name__ == "__main__":
+    print("Test the DatabaseManager class (only select)")
+    
+    db = DatabaseManager()
+  
+    print("\nTest: select_to_check")
+    print(db.select_to_check())
+    
+    print("\n\nTest: select_applied")
+    print(db.select_applied())
+    
+    db.close()
+    print("\n\nAll tests completed successfully")
+
+
     
     
