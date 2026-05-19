@@ -1,7 +1,11 @@
 #Module with everything about database
 
+##########
+#Libraries
+##########
+from . import general_tools as gt
+
 import sqlite3
-import general_tools as gt
 
 #Class for the access to the table listing the job offers
 class DatabaseManager:

@@ -5,8 +5,9 @@
 ##########
 #Libraries
 ##########
+from . import general_tools as gt
+
 import requests
-import general_tools as gt
 import datetime
 
 
