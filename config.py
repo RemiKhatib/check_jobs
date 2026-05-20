@@ -1,11 +1,17 @@
 import pathlib as pl
 
+DEV=True
+#To uncomment during testing phase
+#DEV=True
+
 
 ###########
 # Constants
 ###########
 HEADERS = ("Website", "Id", "Company", "Title", "City", "Zipcode", 
         "Date of creation", "Date found", "Checked", "To apply", "Application date")  # Header for the tables
+NB_OFFERS_MAX=total=500      #Number maximal of offers displayed by the API
+
 
 
 #######################

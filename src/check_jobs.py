@@ -13,7 +13,6 @@ import tabulate
 
 
 def main():
-    SOURCES = [apec, bdf, bpce]                     # List of scrappers
     logger = logging.getLogger(__name__)
 
 
@@ -27,7 +26,7 @@ def main():
     ##########################
     #Loop through the websites
     ##########################
-    for source in SOURCES:
+    for source in [apec, bdf, bpce]:
         try :
             jobs = source.read()
             db.upsert(jobs)

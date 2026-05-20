@@ -5,6 +5,7 @@
 ##########
 #Libraries
 ##########
+import config
 from . import general_tools as gt
 
 import requests
@@ -15,8 +16,6 @@ import datetime
 #Read the page associate with mobilite BPCE
 ###########################################
 def read():
-
-    nb_offers_max=500 #Number of offers displayed by the API
 
     #API call
     url = 'https://mobilite.groupebpce.fr/app/wp-json/bpce/v1/search/jobs'
@@ -39,19 +38,19 @@ def read():
         "external": False,
         "userID": "",
         "from": 0,
-        "size": nb_offers_max
+        "size": config.NB_OFFERS_MAX
     }
     #The goal is to use a test file instead of calling the website BPCE
-    if not gt.DEV :
+    if not config.DEV :
         response = requests.post(url, json=data)
     else :
-        response=gt.MockResponse("bpce_test.json",200)
+        response=gt.MockResponse("tests/bpce_test.json",200)
 
     #Extraction of the main information
     if response.status_code == 200:
         ljobs=[]
         jobs = response.json()
-        if(jobs["data"]["total"]<=nb_offers_max):
+        if(jobs["data"]["total"]<=config.NB_OFFERS_MAX):
             for job in jobs["data"]["items"]:
                 ljobs.append({
                     "website" : "BPCE",
@@ -69,7 +68,7 @@ def read():
 
         #Too many answers
         else:
-            print(f"Too many offers available on BPCE ({jobs["data"]["total"]}). Max limit reached ({nb_offers_max}).")
+            print(f"Too many offers available on BPCE ({jobs["data"]["total"]}). Max limit reached ({config.NB_OFFERS_MAX}).")
             return []
 
     #API problem

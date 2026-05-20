@@ -5,6 +5,7 @@
 ##########
 #Libraries
 ##########
+import config
 from . import general_tools as gt
 
 import requests
@@ -15,8 +16,6 @@ import datetime
 #Read the page associate with mobilite APEC
 ###########################################
 def read():
-
-    nb_offers_max=500 #Number of offers displayed by the API
 
     #API call
     url = 'https://www.apec.fr/cms/webservices/rechercheOffre'
@@ -34,7 +33,7 @@ def read():
             "positionNumbersExcluded":[],
             "typeClient":"CADRE",
             "sorts":[{"type":"DATE","direction":"DESCENDING"}],
-            "pagination":{"range":nb_offers_max,"startIndex":0},
+            "pagination":{"range":config.NB_OFFERS_MAX,"startIndex":0},
             "activeFiltre":True,
             "pointGeolocDeReference":{"distance":0},
             "salaireMinimum":"60",
@@ -42,16 +41,16 @@ def read():
             "motsCles":"banque"
         }
     #The goal is to use a test file instead of calling the website APEC
-    if not gt.DEV :
+    if not config.DEV :
         response = requests.post(url, json=data)
     else :
-        response=gt.MockResponse("APEC_test.json",200)
+        response=gt.MockResponse("tests/apec_test.json",200)
 
     #Extraction of the main information
     if response.status_code == 200:
         ljobs=[]
         jobs = response.json()
-        if(jobs["totalCount"]<=nb_offers_max):
+        if(jobs["totalCount"]<=config.NB_OFFERS_MAX):
             for job in jobs["resultats"]:
                 ljobs.append({
                     "website" : "APEC",
@@ -69,7 +68,7 @@ def read():
 
         #Too many answers
         else:
-            print(f"Too many offers available on APEC ({jobs["totalCount"]}). Max limit reached ({nb_offers_max}).")
+            print(f"Too many offers available on APEC ({jobs["totalCount"]}). Max limit reached ({config.NB_OFFERS_MAX}).")
             return []
 
     #API problem

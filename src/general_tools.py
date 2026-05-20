@@ -6,9 +6,7 @@
 import inspect
 import json
 
-DEV=False
-#To uncomment during testing phase
-#DEV=True
+
 
 ########
 #Classes
@@ -22,7 +20,6 @@ class MockResponse:
     
     def json(self):
         return self.data
-
 
 
 

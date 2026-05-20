@@ -11,7 +11,7 @@ The basic information about the jobs are displayed on the html page. Then you ca
 
 # Work in progress
 # Plan :
-1. [] Store every offer in database. The table should contain : 
+1. [X] Store every offer in database. The table should contain : 
   - website : website where the offer wwas found
   - id ; Id of the job
   - company : company proposing the job
@@ -40,7 +40,7 @@ The basic information about the jobs are displayed on the html page. Then you ca
   - LCL : No
  
 
-3. [] Create a database => OK
+3. [X] Create a database => OK
 
 4. [] Delete the jobs which do not appear anymore in the extraction.
 
