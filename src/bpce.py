@@ -17,6 +17,8 @@ import datetime
 ###########################################
 def read():
 
+    today=datetime.date.today()
+
     #API call
     url = 'https://mobilite.groupebpce.fr/app/wp-json/bpce/v1/search/jobs'
     data = {
@@ -53,16 +55,17 @@ def read():
         if(jobs["data"]["total"]<=config.NB_OFFERS_MAX):
             for job in jobs["data"]["items"]:
                 ljobs.append({
-                    "website" : "BPCE",
-                    "id" : job["job_number"],
-                    "company" : job["brand"][0],
-                    "title" : job["title"],
-                    "link" : "https://mobilite.groupebpce.fr"+job["link"]["url"],
-                    "city" : job["localisations"][0]["city"],
-                    "zipcode" : job["localisations"][0]["zipcode"],
-                    "address" : job["localisations"][0]["address"],
+                    "website"       : "BPCE",
+                    "id"            : job["job_number"],
+                    "company"       : job["brand"][0],
+                    "title"         : job["title"],
+                    "link"          : "https://mobilite.groupebpce.fr"+job["link"]["url"],
+                    "city"          : job["localisations"][0]["city"],
+                    "zipcode"       : job["localisations"][0]["zipcode"],
+                    "address"       : job["localisations"][0]["address"],
                     "date_creation" : datetime.date.fromisoformat(job["datetime"][:10]),
-                    "date_found" : datetime.date.today()
+                    "date_found"    : today,
+                    "last_update"   : today
                 })
             return ljobs
 

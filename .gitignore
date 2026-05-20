@@ -8,4 +8,7 @@
 *.json
 
 #Binaries
-__pycache__/ 
+__pycache__/
+
+#Environment
+.venv

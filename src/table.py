@@ -3,6 +3,7 @@
 ##########
 #Libraries
 ##########
+import config
 from . import general_tools as gt
 
 import sqlite3
@@ -14,7 +15,35 @@ class DatabaseManager:
         self.con = sqlite3.connect(db_name)
         self.cur = self.con.cursor()
 
-    #Create a table if it does not exist    
+    def __enter__(self):
+        return self
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
+        return False
+        
+    def close(self):
+        self.con.close()
+
+
+    ########################################
+    #Create a table if it does not exist.abs   
+    ########################################
+    # - id_prim       : Primary index
+    # - website       : Website where I found it
+    # - id            : Id of the job on the website
+    # - company       : Company who proposes the job
+    # - title         : title of the job
+    # - link          : link to the offer
+    # - city          : city of the job
+    # - zipcode       : zip code of the city
+    # - address       : adress (street, ...)
+    # - date_creation : date when the offer was posted
+    # - date_found    : date when the offer has been recorded on the DB
+    # - checked       : To check if I saw the offer
+    # - to_apply      : To analyse more carefully and decide if I have to apply
+    # - date_applied  : Application date
+    # - last_update   : Last update of the record
     def create_table(self):
         self.cur.execute("""
             CREATE TABLE IF NOT EXISTS job_offers (
@@ -32,6 +61,7 @@ class DatabaseManager:
                 checked         INTEGER DEFAULT 0,
                 to_apply        INTEGER DEFAULT 0,
                 date_applied    DATE DEFAULT NULL,
+                last_update     DATE DEFAULT NULL,
                 UNIQUE(website, id)
             )
         """)
@@ -49,11 +79,11 @@ class DatabaseManager:
                     if isinstance(value, list):
                         print(f"ERROR: {key} is a list: {value}")
                 try:
-                    #We insert everything but the date of application.
-                    #We update everything but the date of application and the date when it has been found
+                    #We insert everything but checked, to_apply and date_applied
+                    #We update everything we inserted but date_found
                     self.cur.execute("""
-                        INSERT INTO job_offers (website, id, company, title, link, city, zipcode, address, date_creation, date_found)
-                        VALUES (:website, :id, :company, :title, :link, :city, :zipcode, :address, :date_creation, :date_found)
+                        INSERT INTO job_offers (website, id, company, title, link, city, zipcode, address, date_creation, date_found, last_update)
+                        VALUES (:website, :id, :company, :title, :link, :city, :zipcode, :address, :date_creation, :date_found, :last_update)
                         ON CONFLICT(website, id) DO UPDATE SET
                             company         = excluded.company      ,
                             title           = excluded.title        ,
@@ -61,7 +91,8 @@ class DatabaseManager:
                             city            = excluded.city         ,
                             zipcode         = excluded.zipcode      ,
                             address         = excluded.address      ,
-                            date_creation   = excluded.date_creation
+                            date_creation   = excluded.date_creation,
+                            last_update     = excluded.last_update
                     """, job)
                     nb_ok+=1
                 except sqlite3.IntegrityError as e:
@@ -75,7 +106,8 @@ class DatabaseManager:
 
 
     #Display all the jobs that I have to yet checked or the jobs where I should apply.
-    #All the columns are displayed but primary key and address. Associate "title" and "link" in the same column.
+    #All the columns are displayed but primary key, address and last_update.
+    # I associate "title" and "link" in the same column.
     def select_to_check(self):
         self.cur.execute("""
             SELECT 
@@ -98,7 +130,8 @@ class DatabaseManager:
 
 
     #Display all the jobs where I applied
-    #All the columns are displayed but primary key and address. Associate "title" and "link" in the same column.
+    #All the columns are displayed but primary key, address and last_update.
+    # I associate "title" and "link" in the same column.
     def select_applied(self):
         self.cur.execute("""
             SELECT 
@@ -119,10 +152,19 @@ class DatabaseManager:
         """)
         return self.cur.fetchall()
 
+    #Delete old data:
+    #  - job_offers where I did not apply and not appearing for 1 month
+    #  - job_offers where I applied but not appearing for 1 year
+    def delete_old(self):
+        self.cur.execute(f"""
+            DELETE
+            FROM job_offers
+            WHERE (last_update < date('now','-{config.MONTHS_NOT_APPLIED} month') and date_applied is null)
+               OR  last_update < date('now','-{config.YEARS_APPLIED} year')
+        """)
+        self.con.commit()
+        print(f"{self.cur.rowcount} job offers deleted")
 
-
-    def close(self):
-        self.con.close()
 
 
 if __name__ == "__main__":

@@ -17,7 +17,9 @@ import datetime
 ##########################################
 def read():
 
+    today=datetime.date.today()
     total=config.NB_OFFERS_MAX
+
     offset=0 #Offset to check all the pages
     limit=20 #Maximal number of jobs displayed per page
 
@@ -64,7 +66,8 @@ def read():
                             "zipcode"       : "",
                             "address"       : detail["jobPostingInfo"]["jobRequisitionLocation"]["descriptor"],
                             "date_creation" : datetime.date.fromisoformat(detail["jobPostingInfo"]["startDate"]),
-                            "date_found"    : datetime.date.today()
+                            "date_found"    : today,
+                            "last_update"   : today
                         })
 
                     #API problem

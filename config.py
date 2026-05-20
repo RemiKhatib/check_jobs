@@ -11,7 +11,8 @@ DEV=True
 HEADERS = ("Website", "Id", "Company", "Title", "City", "Zipcode", 
         "Date of creation", "Date found", "Checked", "To apply", "Application date")  # Header for the tables
 NB_OFFERS_MAX=total=500      #Number maximal of offers displayed by the API
-
+MONTHS_NOT_APPLIED = 1       #Delete time in month before a purge if I did not applied to a job
+YEARS_APPLIED = 1            #Delete time in year before a purge if I applied to a job
 
 
 #######################

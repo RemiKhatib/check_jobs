@@ -17,6 +17,7 @@ import datetime
 ###########################################
 def read():
 
+    today=datetime.date.today()
     #API call
     url = 'https://www.apec.fr/cms/webservices/rechercheOffre'
     data = {
@@ -53,16 +54,17 @@ def read():
         if(jobs["totalCount"]<=config.NB_OFFERS_MAX):
             for job in jobs["resultats"]:
                 ljobs.append({
-                    "website" : "APEC",
-                    "id" : job["numeroOffre"],
-                    "company" : job.get("nomCommercial",""), #Sometimes does not exist
-                    "title" : job["intitule"],
-                    "link" : "https://www.apec.fr/candidat/recherche-emploi.html/emploi/detail-offre/"+job["numeroOffre"],
-                    "city" : "",
-                    "zipcode" : "",
-                    "address" : "",
+                    "website"       : "APEC",
+                    "id"            : job["numeroOffre"],
+                    "company"       : job.get("nomCommercial",""), #Sometimes does not exist
+                    "title"         : job["intitule"],
+                    "link"          : "https://www.apec.fr/candidat/recherche-emploi.html/emploi/detail-offre/"+job["numeroOffre"],
+                    "city"          : "",
+                    "zipcode"       : "",
+                    "address"       : "",
                     "date_creation" : datetime.date.fromisoformat(job["datePublication"][:10]),
-                    "date_found" : datetime.date.today()
+                    "date_found"    : today,
+                    "last_update"   : today
                 })
             return ljobs
 
