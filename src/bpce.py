@@ -18,6 +18,8 @@ import datetime
 def read():
 
     today=datetime.date.today()
+    nb_offers_max=500 #Number maximal of offers allowed for this site
+
 
     #API call
     url = 'https://mobilite.groupebpce.fr/app/wp-json/bpce/v1/search/jobs'
@@ -40,7 +42,7 @@ def read():
         "external": False,
         "userID": "",
         "from": 0,
-        "size": config.NB_OFFERS_MAX
+        "size": nb_offers_max
     }
     #The goal is to use a test file instead of calling the website BPCE
     if not config.DEV :
@@ -52,7 +54,7 @@ def read():
     if response.status_code == 200:
         ljobs=[]
         jobs = response.json()
-        if(jobs["data"]["total"]<=config.NB_OFFERS_MAX):
+        if(jobs["data"]["total"]<=nb_offers_max):
             for job in jobs["data"]["items"]:
                 ljobs.append({
                     "website"       : "BPCE",
@@ -71,7 +73,7 @@ def read():
 
         #Too many answers
         else:
-            print(f"Too many offers available on BPCE ({jobs["data"]["total"]}). Max limit reached ({config.NB_OFFERS_MAX}).")
+            print(f"Too many offers available on BPCE ({jobs["data"]["total"]}). Max limit reached ({nb_offers_max}).")
             return []
 
     #API problem

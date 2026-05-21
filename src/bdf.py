@@ -18,7 +18,7 @@ import datetime
 def read():
 
     today=datetime.date.today()
-    total=config.NB_OFFERS_MAX
+    nb_offers_max=total=500 #Number maximal of offers allowed for this site
 
     offset=0 #Offset to check all the pages
     limit=20 #Maximal number of jobs displayed per page
@@ -50,7 +50,7 @@ def read():
             total=jobs["total"]
             offset+=limit
 
-            if(jobs["total"]<=config.NB_OFFERS_MAX):
+            if(jobs["total"]<=nb_offers_max):
                 for job in jobs["jobPostings"]:
                     resp_detail=requests.get("https://bdf.wd103.myworkdayjobs.com/wday/cxs/bdf/recrutement-banque-de-France"+job["externalPath"])
                     detail=resp_detail.json()
@@ -78,7 +78,7 @@ def read():
 
             #Too many answers
             else:
-                print(f"Too many offers available on BPCE ({jobs["data"]["total"]}). Max limit reached ({config.NB_OFFERS_MAX}).")
+                print(f"Too many offers available on BPCE ({jobs["data"]["total"]}). Max limit reached ({nb_offers_max}).")
                 return []
 
         #API problem

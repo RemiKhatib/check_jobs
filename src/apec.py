@@ -18,6 +18,7 @@ import datetime
 def read():
 
     today=datetime.date.today()
+    nb_offers_max=100      #Number maximal of offers displayed by the API of APEC
     #API call
     url = 'https://www.apec.fr/cms/webservices/rechercheOffre'
     data = {
@@ -34,14 +35,13 @@ def read():
             "positionNumbersExcluded":[],
             "typeClient":"CADRE",
             "sorts":[{"type":"DATE","direction":"DESCENDING"}],
-            "pagination":{"range":config.NB_OFFERS_MAX,"startIndex":0},
+            "pagination":{"range":nb_offers_max,"startIndex":0},
             "activeFiltre":True,
             "pointGeolocDeReference":{"distance":0},
             "salaireMinimum":"60",
             "salaireMaximum":"200",
             "motsCles":"banque"
         }
-    #The goal is to use a test file instead of calling the website APEC
     if not config.DEV :
         response = requests.post(url, json=data)
     else :
@@ -51,7 +51,7 @@ def read():
     if response.status_code == 200:
         ljobs=[]
         jobs = response.json()
-        if(jobs["totalCount"]<=config.NB_OFFERS_MAX):
+        if(jobs["totalCount"]<=nb_offers_max):
             for job in jobs["resultats"]:
                 ljobs.append({
                     "website"       : "APEC",
@@ -70,7 +70,7 @@ def read():
 
         #Too many answers
         else:
-            print(f"Too many offers available on APEC ({jobs["totalCount"]}). Max limit reached ({config.NB_OFFERS_MAX}).")
+            print(f"Too many offers available on APEC ({jobs["totalCount"]}). Max limit reached ({nb_offers_max}).")
             return []
 
     #API problem
@@ -81,5 +81,6 @@ def read():
     
 if __name__=="__main__":
     jobs=read()
+    print(f"- Test len(job) : {len(jobs)}")
     for job in jobs:
         print(job)

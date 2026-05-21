@@ -27,5 +27,3 @@ The basic information about the jobs are displayed on the html page. Then you ca
 [] Make the python requierements.txt "pip freeze > requirements.txt"
 
 [] Make the documentation
-
-[] Control the number of records returned by apec.py
