@@ -2,7 +2,8 @@
 
 I do not like to reveive e-mails by different websites proposing some job offers. There is nothing like RRS to manage the jobs so I have created mine.
 
-# How to use it ?
+
+# Usage
 Run it when you want to download the last job offers. Now there is only BPCE, Banque de France and APEC (maybe more later).
 It creates :
   - a database accessible with sqlite (table job_offers).
@@ -11,7 +12,8 @@ It creates :
     - The jobs you should shoukd check and the jobs you should apply
     - The jobs you applied
 
-# Under construction : How to install ?
+
+# How to install and use it ?
 On linux, use makefile :
 #### Virtual environment creation
 ```make venv```
@@ -22,9 +24,27 @@ On linux, use makefile :
 
 or
 
-```.venv/bin/python -m src.check_jobs ```
+```.venv/bin/python3 -m src.check_jobs ```
 #### Clean the virtual environment and the compiled files
 ```make clean```
+#### List all the targets of the makefile
+```make help```
+
+
+# List of modules
+#### ./src/check_jobs.py
+Main script which calls all the others. As mentionned, it allows you to get all the jobs you want to check.
+#### ./src/{apec.py,bdf.py,bpce.py}
+Modules associated with the scrapping of the websites.
+#### ./src/general_tools.py
+Module which contains general tools which can be reused anytime.
+#### ./src/table.py
+Module with everything about database.
+#### ./config.py
+Configuration file. The main parameters are :
+  - MONTHS_NOT_APPLIED : Delete time in month before a purge if I did not applied to a job.
+  - YEARS_APPLIED : Delete time in year before a purge if I applied to a job
+
 
 # Future developments
   - Add extra websites to check :
